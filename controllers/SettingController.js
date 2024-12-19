@@ -1,10 +1,4 @@
-
-const multer = require('multer');
-const path = require('path');
-const {upload} = require("../utils/Helper");
 const uploadLogo = async (req, res) => {
-   const logo = upload.single('logo')
-    console.log(logo);
     try {
         const file = req.file;
         if (!file) {
