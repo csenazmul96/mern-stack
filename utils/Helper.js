@@ -27,6 +27,7 @@ const processAndStoreImage = (req, res, next) => {
 
         if (!fs.existsSync(storagePath)) {
             fs.mkdirSync(storagePath);
+
         }
 
         sharp(tempPath)
