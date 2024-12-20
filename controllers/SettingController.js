@@ -1,15 +1,21 @@
+const Setting = require('../models/Settings');
 const uploadLogo = async (req, res) => {
+    let firstItem = await Setting.findOne().sort({ createdAt: 1 }).exec();
     try {
         const file = req.file;
-        if (!file) {
-            return res.status(400).send('No file uploaded');
+        if(!firstItem){
+            firstItem = new Setting();
         }
-        res.status(200).json({
-            message: 'File uploaded successfully',
-            filePath: `/storage/${file.filename}`,
-        });
+        if(file){
+            firstItem.logo = file ?  `/storage/${file.filename}` : null;
+        }
+
+        if(req.body.intro){
+            firstItem.intro = req.body.intro;
+        }
+
+        await firstItem.save();
     } catch (error) {
-        console.error(error);
         res.status(500).send('Server error');
     }
     return res.status(200).send({})

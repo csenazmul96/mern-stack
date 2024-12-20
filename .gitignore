@@ -21,7 +21,8 @@
 # next.js
 /.next/
 /out/
-/storage
+/utils/storage
+/utils/temp
 
 # production
 /build

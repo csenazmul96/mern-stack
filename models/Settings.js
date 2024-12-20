@@ -5,18 +5,12 @@ const SettingsSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
-    email: {
+    intro:{
         type: String,
-        required: true,
-        unique: true,
-    },
-    password: {
-        type: String,
-        required: true,
-    },
+        required: false,
+    }
 }, { timestamps: true });
 
-// Export User Model
-const User = mongoose.model('Setting', SettingsSchema);
+const Setting = mongoose.model('Setting', SettingsSchema);
 
-module.exports = User;
+module.exports = Setting;
