@@ -1,5 +1,7 @@
 const User = require('../models/userModel');
 const Joi = require('joi');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 // Fetch all users
 const getUsers = async (req, res) => {
@@ -16,10 +18,10 @@ const createUser = async (req, res) => {
 
   try {
     const { name, email, password } = req.body;
+    const salt = await bcrypt.genSalt(10);
+    const newPass = await bcrypt.hash(password, salt);
 
-
-    // Create user in DB
-    const newUser = await User.create({ name, email, password });
+    const newUser = await User.create({ name, email, password:newPass });
 
     res.status(201).json(newUser);
   } catch (error) {
@@ -27,4 +29,38 @@ const createUser = async (req, res) => {
   }
 };
 
-module.exports = { getUsers, createUser };
+
+const userLogin = async (req, res) => {
+  // const { email, password } = req.body;
+  // console.log(req.body.email);
+  // try {
+  //   const { email, password } = req.body;
+  //   const user = await User.findOne({ email });
+  //   if (!user) return res.status(404).json({ message: 'User not found' });
+  //
+  //   const isMatch = await bcrypt.compare(password, user.password);
+  //   if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
+  //
+  //   const token = jwt.sign({ id: user._id }, 'secretKey', { expiresIn: '1h' });
+  //   res.json({ token });
+  // } catch (err) {
+  //   res.status(500).json({ error: err.message });
+  // }
+
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
+
+    const token = jwt.sign({ id: user._id }, 'secretKey', { expiresIn: '1h' });
+    res.cookie('authToken', token, { httpOnly: true }).json({ message: 'Logged in successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+  //
+}
+
+module.exports = { getUsers, createUser, userLogin };
