@@ -4,11 +4,22 @@ const validateUser = require('../middlewares/validateUser');
 const jwt = require('jsonwebtoken');
 
 const verifyToken = (req, res, next) => {
-    console.log("Cookies:", req.cookies); // Debugging log
-    // const token = req.cookies.authToken;
-     return res.status(401).json({ message: "Unauthorized" });
-    //
+    const { cookie } =req.headers
+    let token = cookie.replace('authToken=', '');
+
+    // Verify the token
+    console.log(token);
+    const secretKey = "secretKey"; // Replace with your actual secret key
+    // const decoded = jwt.verify(token, secretKey);
+
+    // Attach the user payload to the request
+    // req.user = decoded;
+
+    // Proceed to the next middleware or route handler
+    next();
+
     // jwt.verify(token, "secretKey", (err, user) => {
+    //     console.log(err.message);
     //     if (err) return res.status(403).json({ message: "Forbidden" });
     //     req.user = user;
     //     next();
@@ -18,14 +29,15 @@ const verifyToken = (req, res, next) => {
 const router = express.Router();
 
 // Routes
-// router.get('/', getUsers);
+router.get('/', verifyToken, (req, res) => {
+    res.json({ message: `Welcome` });
+});
+
 router.post('/',validateUser, createUser);
 router.post('/logout', (req, res) => {
     res.clearCookie("authToken").json({ message: "Logged out" });
 });
 
-router.get('/', verifyToken, (req, res) => {
-    res.json({ message: `Welcome, ${req.user.username}` });
-});
+
 
 module.exports = router;
