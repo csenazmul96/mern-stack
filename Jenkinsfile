@@ -18,7 +18,7 @@ pipeline {
                     ssh-add ~/.ssh/id_rsa_bitbucket
 
                     echo "Navigating to the Laravel project directory..."
-                    cd /var/www/html/lynkto-hankook-shopping-front
+                    cd /var/www/html/mern-stack
 
 
 
