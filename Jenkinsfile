@@ -32,7 +32,7 @@ pipeline {
                     echo "NPM build start"
                     npm run build
                     echo "NPM build end"
-                    pm2 restart all
+
                     '''
                 }
             }
