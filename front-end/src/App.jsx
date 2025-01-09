@@ -4,11 +4,14 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
+
   const [count, setCount] = useState(0)
+    const url = import.meta.env.VITE_API_KEY
 
   return (
     <>
       <div>
+          {url}
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
