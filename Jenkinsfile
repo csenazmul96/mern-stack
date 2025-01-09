@@ -25,6 +25,7 @@ pipeline {
                     echo "Pulling latest code from origin/main..."
                     git pull origin main --no-rebase
 
+                    cd /var/www/html/mern-stack/front-end
                     echo "NPM install start"
                     npm install
                     echo "NPM install end"
